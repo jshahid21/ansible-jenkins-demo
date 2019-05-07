@@ -2,6 +2,7 @@
 - name: Install docker
   hosts: webserver
   remote_user: opc
+  become: yes
 
   tasks:
     - name: Install Docker prerequisites

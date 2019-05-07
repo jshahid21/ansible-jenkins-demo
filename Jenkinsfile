@@ -12,6 +12,7 @@ pipeline {
       steps {
         checkout scm
         sh 'echo $SVC_ACCOUNT_KEY | base64 -d > terraform.tfvars'
+      }
     }
 
     stage('Ansible Playbook') {

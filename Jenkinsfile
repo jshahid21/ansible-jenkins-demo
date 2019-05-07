@@ -17,7 +17,7 @@ pipeline {
 
     stage('Ansible Playbook') {
       steps {
-          sh 'sudo ansible-playbook -i /var/lib/jenkins/workspace/AnsibleJenkins/ansible-playbook/hosts --private-key=/var/lib/jenkins/.ocijs/id_rsa /var/lib/jenkins/workspace/AnsibleJenkins/ansible-playbook/main.yml'
+          sh 'sudo ansible-playbook -i /var/lib/jenkins/workspace/AnsibleJenkinsOCI/ansible-playbook/hosts --private-key=/var/lib/jenkins/.ocijs/id_rsa /var/lib/jenkins/workspace/AnsibleJenkinsOCI/ansible-playbook/main.yml'
       }
     }
   }

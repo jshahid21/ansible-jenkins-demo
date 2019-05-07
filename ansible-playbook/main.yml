@@ -1,0 +1,82 @@
+---
+- name: Install docker
+  hosts: webserver
+  remote_user: opc
+
+  tasks:
+    - name: Install Docker prerequisites
+      yum:
+        name:
+          - yum-utils
+          - device-mapper-persistent-data
+          - lvm2
+        state: latest
+
+    - name: Get docker repo
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo
+
+    - name: Install Docker
+      yum:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - python-pip
+
+    - name: install docker-py
+      pip: name=docker-py
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+      become: yes
+
+    # - name: Install Git
+    #   yum: name=git
+    # - name: Clone docker app github repo
+    #   git:
+    #     repo: https://github.com/jshahid21/ansible-docker-app.git
+    #     dest: /home/opc/docker
+    #     clone: yes
+    #   become: yes
+    #
+    # # - name: Synchronization using rsync protocol (push)
+    # #   synchronize:
+    # #     src: docker
+    # #     dest: /home/opc/
+    #
+    # - name: build the image
+    #   command: docker build -t built-by-ansible:ex1 /home/opc/docker
+    #   become: yes
+    #
+    # - name: run the site in a docker container
+    #   docker_container:
+    #     name: site1
+    #     image: "built-by-ansible:ex1"
+    #     state: started
+    #     detach: yes
+    #     published_ports: 8888:5000
+    #   become: yes
+
+    - name: pull an image
+      docker_image:
+        name: jshahid21/db-apex-dev-image
+      become: yes
+
+    - name: run the site in a docker container
+      docker_container:
+        name: db-apex-dev-image
+        image: "jshahid21/db-apex-dev-image"
+        state: started
+        detach: yes
+        privileged: yes
+        devices:
+          - /dev/shm
+        tmpfs:
+          - /dev/shm:rw,nosuid,nodev,size=2g
+        published_ports: 2222:22,8080:8080,1521:1521
+      become: yes

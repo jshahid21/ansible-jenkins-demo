@@ -6,7 +6,7 @@
 
   tasks:
 
-    - name: run the site in a docker container
+    - name: stop the docker container
       docker_container:
         name: db-apex-dev-image
         image: "jshahid21/db-apex-dev-image"
